@@ -1,0 +1,21 @@
+{
+  "name": "trading-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JuanGrajales/trading-app.git"
+  },
+  "keywords": [],
+  "author": "Juan Grajales",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JuanGrajales/trading-app/issues"
+  },
+  "homepage": "https://github.com/JuanGrajales/trading-app#readme",
+  "type": "module"
+}

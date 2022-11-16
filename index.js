@@ -1,148 +1,27 @@
-let AUDCAD = 0.87891 * 100000;
-let orderTypeAUDCAD = "buy";
-let CADCHF = 0.73405 * 100000;
-let orderTypeCADCHF = "buy";
-let EURUSD = 0.9936 * 100000;
-let orderTypeEURUSD = "sell";
-let NZDCAD = 0.80148 * 100000;
-let orderTypeNZDCAD = "buy";
-let USDCAD = 1.33445 * 100000;
-let orderTypeUSDCAD = "sell";
-const pipDiff = 250;
+import { Matrix } from "./matrix.js";
+import { Signal } from "./signal.js";
 
-// const eurusd = [new Signal]
-
-// {
-//   pair: "AUDCAD",
-//   startPrice: AUDCAD,
-//   orderType: orderTypeAUDCAD,
-//   officialMatrix: getMatrixValues({
-//     startPrice: AUDCAD,
-//     orderType: orderTypeAUDCAD,
-//   }),
-//   officialClosing: 0,
-//   actualMatrix: getMatrixValues({
-//     startPrice: AUDCAD,
-//     orderType: orderTypeAUDCAD,
-//     officialMatrix: false,
-//   }),
-//   actualClosing: 0,
-// },
-
-const getMatrixValues = ({
-  startPrice = 0,
-  officialMatrix = true,
-  orderType,
-}) => {
-  if (officialMatrix) {
-    let startPriceCopy = startPrice;
-    return new Array(8).fill(0).map(() => {
-      startPriceCopy =
-        orderType === "sell"
-          ? startPriceCopy + pipDiff
-          : startPriceCopy - pipDiff;
-      return (startPriceCopy / 100000).toString().padEnd(7, "0");
-    });
-  } else {
-    let adjustedStartPrice =
-      orderType === "sell" ? startPrice - 15 : startPrice + 15;
-    return new Array(8).fill(0).map((el) => {
-      adjustedStartPrice =
-        orderType === "sell"
-          ? adjustedStartPrice + pipDiff
-          : adjustedStartPrice - pipDiff;
-      return (adjustedStartPrice / 100000).toString().padEnd(7, "0");
-    });
-  }
+const createSignal = ({ forexPairKey, priceStart }) => {
+  const officialMatrix = new Matrix({
+    forexPairKey,
+    priceStart,
+    orderType: "sell",
+  });
+  const userMatrix = new Matrix({
+    forexPairKey,
+    priceStart: 1.32871,
+  });
+  const signal = new Signal({ officialMatrix, userMatrix });
+  return signal;
 };
 
-const forexPairs = [
-  {
-    pair: "AUDCAD",
-    startPrice: AUDCAD,
-    orderType: orderTypeAUDCAD,
-    officialMatrix: getMatrixValues({
-      startPrice: AUDCAD,
-      orderType: orderTypeAUDCAD,
-    }),
-    officialClosing: 0,
-    actualMatrix: getMatrixValues({
-      startPrice: AUDCAD,
-      orderType: orderTypeAUDCAD,
-      officialMatrix: false,
-    }),
-    actualClosing: 0,
-  },
-  {
-    pair: "CADCHF",
-    startPrice: CADCHF,
-    orderType: orderTypeCADCHF,
-    officialMatrix: getMatrixValues({
-      startPrice: CADCHF,
-      orderType: orderTypeCADCHF,
-    }),
-    officialClosing: 0,
-    actualMatrix: getMatrixValues({
-      startPrice: CADCHF,
-      orderType: orderTypeCADCHF,
-      officialMatrix: false,
-    }),
-    actualClosing: 0,
-  },
-  {
-    pair: "EURUSD",
-    startPrice: EURUSD,
-    orderType: orderTypeEURUSD,
-    officialMatrix: getMatrixValues({
-      startPrice: EURUSD,
-      orderType: orderTypeEURUSD,
-    }),
-    officialClosing: 0,
-    actualMatrix: getMatrixValues({
-      startPrice: EURUSD,
-      orderType: orderTypeEURUSD,
-      officialMatrix: false,
-    }),
-    actualClosing: 0,
-  },
-  {
-    pair: "NZDCAD",
-    startPrice: NZDCAD,
-    orderType: orderTypeNZDCAD,
-    officialMatrix: getMatrixValues({
-      startPrice: NZDCAD,
-      orderType: orderTypeNZDCAD,
-    }),
-    officialClosing: 0,
-    actualMatrix: getMatrixValues({
-      startPrice: NZDCAD,
-      orderType: orderTypeNZDCAD,
-      officialMatrix: false,
-    }),
-    actualClosing: 0,
-  },
-  {
-    pair: "USDCAD",
-    startPrice: USDCAD,
-    orderType: orderTypeUSDCAD,
-    officialMatrix: getMatrixValues({
-      startPrice: USDCAD,
-      orderType: orderTypeUSDCAD,
-    }),
-    officialClosing: 0,
-    actualMatrix: getMatrixValues({
-      startPrice: USDCAD,
-      orderType: orderTypeUSDCAD,
-      officialMatrix: false,
-    }),
-    actualClosing: 0,
-  },
-];
+const signal = createSignal({
+  forexPairKey: "e",
+  priceStart: 1.01656,
+});
 
-const neededPairs = ["CADCHF", "AUDCAD", "NZDCAD", "USDCAD"];
-const neededMatrix = forexPairs.filter(({ pair }) =>
-  neededPairs.includes(pair)
-);
+console.log(signal.officialMatrix);
+console.log(signal.userMatrix);
 
 // console.log(neededMatrix);
 
