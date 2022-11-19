@@ -1,9 +1,11 @@
 export class Order {
-  constructor({ orderType, price, priceStart, level, targetPips }) {
-    this.price = price;
+  constructor({ orderType, price, priceStart, level, targetPips, lotSize }) {
     this.level = level;
-    this.priceEnd = this.calculatePriceEnd(priceStart, targetPips, orderType);
+    this.lotSize = lotSize;
     this.orderType = orderType;
+    this.price = price;
+    this.priceEnd = this.calculatePriceEnd(priceStart, targetPips, orderType);
+
     // pips
     // profit
   }

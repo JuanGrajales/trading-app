@@ -47,6 +47,23 @@ export class Matrix {
     return Math.round(lastOrderPrice + pipSumAverage + targetPipAverage);
   }
 
+  calculateCurrent() {
+    const lastOrderPrice = this.orders[this.orders.length - 1].price;
+    const pipSum = this.orders.reduce((accum, curr) => {
+      const pipDifference = Math.abs(curr.price - lastOrderPrice);
+      return accum + pipDifference;
+    }, 0);
+
+    let pipSumAverage = pipSum / this.orders.length;
+    let targetPipAverage = this.targetPips / this.orders.length;
+
+    pipSumAverage = this.orderType === "sell" ? -pipSumAverage : pipSumAverage;
+    targetPipAverage =
+      this.orderType === "sell" ? -targetPipAverage : targetPipAverage;
+
+    return Math.round(lastOrderPrice + pipSumAverage + targetPipAverage);
+  }
+
   createOrders(priceStart, orderType, targetPips) {
     const pipDiff = 250;
 
@@ -55,12 +72,16 @@ export class Matrix {
         orderType === "sell"
           ? priceStart + pipDiff * index
           : priceStart - pipDiff * index;
+
+      const lotSize = this.getOrderLotSize(index);
+
       return new Order({
+        level: index,
+        lotSize,
+        orderType,
         price: orderPrice,
         priceStart,
-        level: index,
         targetPips,
-        orderType,
       });
     });
   }
@@ -74,5 +95,16 @@ export class Matrix {
       c: "CADCHF",
     };
     return forexPairs[forexPairKey];
+  }
+
+  getOrderLotSize(orderIndex, levelsPerIncrease = 4) {
+    switch (Math.floor(orderIndex / levelsPerIncrease)) {
+      case 2:
+        return 8000;
+      case 1:
+        return 7000;
+      default:
+        return 6000;
+    }
   }
 }
