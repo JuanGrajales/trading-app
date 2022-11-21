@@ -5,7 +5,8 @@ export class Order {
     this.orderType = orderType;
     this.price = price;
     this.priceEnd = this.calculatePriceEnd(priceStart, targetPips, orderType);
-
+    this.pipDiff = 0;
+    this.profit = 0;
     // pips
     // profit
   }

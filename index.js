@@ -22,30 +22,32 @@ const createSignal = ({
 };
 
 const signal = createSignal({
-  forexPairKey: "e",
-  priceStartOfficial: 1.01656,
-  priceStartUser: 1.01689,
-  orderTypeKey: "s",
+  forexPairKey: "c",
+  priceStartOfficial: 0.73133,
+  priceStartUser: 0.73386,
+  orderTypeKey: "b",
   time: "11/14/2022",
 });
 
-signal.officialMatrix.orders[1].price = 101935;
-signal.officialMatrix.orders[2].price = 102179;
-signal.officialMatrix.orders[3].price = 102437;
-signal.officialMatrix.orders[4].price = 102700;
-signal.officialMatrix.orders[5].price = 102901;
-signal.officialMatrix.orders[6].price = 103134;
-signal.officialMatrix.orders[7].price = 103388;
-signal.officialMatrix.orders[8].price = 103614;
+signal.officialMatrix.orders[1].price = 72834;
+signal.officialMatrix.orders[2].price = 72394;
+signal.officialMatrix.orders[3].price = 72139;
+signal.officialMatrix.orders[4].price = 71835;
+signal.officialMatrix.orders[5].price = 71227;
+signal.officialMatrix.orders[6].price = 70967;
+signal.officialMatrix.orders[7].price = 70720;
+signal.officialMatrix.orders[8].price = 71000;
 
-signal.userMatrix.orders[1].price = 101895;
-signal.userMatrix.orders[2].price = 102140;
-signal.userMatrix.orders[3].price = 102389;
-signal.userMatrix.orders[4].price = 102640;
-signal.userMatrix.orders[5].price = 102889;
-signal.userMatrix.orders[6].price = 103144;
-signal.userMatrix.orders[7].price = 103390;
-signal.userMatrix.orders[8].price = 103563;
+signal.userMatrix.orders[1].price = 73180;
+signal.userMatrix.orders[2].price = 72928;
+signal.userMatrix.orders[3].price = 72678;
+signal.userMatrix.orders[4].price = 72427;
+signal.userMatrix.orders[5].price = 72178;
+signal.userMatrix.orders[6].price = 71928;
+signal.userMatrix.orders[7].price = 71677;
+signal.userMatrix.orders[8].price = 71419;
+signal.userMatrix.orders[9].price = 71177;
+signal.userMatrix.orders[10].price = 70923;
 
 // console.log(signal.officialMatrix);
 // console.log(signal.userMatrix);
@@ -80,14 +82,15 @@ const marginLevel = ((balance - losses) * 100) / margin;
 // console.log("margin", margin);
 // console.log("marginLevel", marginLevel);
 
-// (single pip value / currency rate) * lot size
-const pipValue = (0.0001 / 1.0264) * 6500; // I think this is correct
-// console.log("pipValue", pipValue);
-// console.log("pipValue", pipValue * 1350); // single pip value * pipSumForOrder = total profit (this can be negative, which would be it's loss)
+// (size of a single pip value / currency rate) * lot size
+const pipValue = (0.0001 / 0.73386) * 6000; // I think this is correct
+console.log("pipValue", pipValue);
+console.log("pipValue", pipValue * 221); // single pip value * pipSumForOrder = total profit (this can be negative, which would be it's loss)
 
 // total profit steps:
 // add lot size to orders class DONE
 // calculate profit for each order in matrix class. for this loop you will need to pass the current price or use the predicted closing price and find the pip diff for order. Then use the pipValue formula to get the profit amount (this might be another property in the orders class)
 // sum profit to get each total profit in matrix class
 
-console.log(signal.officialMatrix.orders);
+signal.userMatrix.calculateCurrent(71342);
+console.log(signal.userMatrix.orders);

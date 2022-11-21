@@ -47,27 +47,21 @@ export class Matrix {
     return Math.round(lastOrderPrice + pipSumAverage + targetPipAverage);
   }
 
-  calculateCurrent() {
-    const lastOrderPrice = this.orders[this.orders.length - 1].price;
-    const pipSum = this.orders.reduce((accum, curr) => {
-      const pipDifference = Math.abs(curr.price - lastOrderPrice);
-      return accum + pipDifference;
-    }, 0);
-
-    let pipSumAverage = pipSum / this.orders.length;
-    let targetPipAverage = this.targetPips / this.orders.length;
-
-    pipSumAverage = this.orderType === "sell" ? -pipSumAverage : pipSumAverage;
-    targetPipAverage =
-      this.orderType === "sell" ? -targetPipAverage : targetPipAverage;
-
-    return Math.round(lastOrderPrice + pipSumAverage + targetPipAverage);
+  calculateCurrent(marketPrice) {
+    this.orders.forEach((order, index) => {
+      const pipDifference = Math.abs(order.price - marketPrice);
+      // Multiple by 100000 because order price is multiplied by the same amount
+      const sizeOfSinglePip = 0.0001 * 100000;
+      const pipValue = (sizeOfSinglePip / order.price) * order.lotSize;
+      this.orders[index].pipDiff = pipDifference;
+      this.orders[index].profit = pipValue * pipDifference;
+    });
   }
 
   createOrders(priceStart, orderType, targetPips) {
     const pipDiff = 250;
 
-    return [...new Array(9)].map((el, index) => {
+    return [...new Array(11)].map((el, index) => {
       const orderPrice =
         orderType === "sell"
           ? priceStart + pipDiff * index
@@ -100,7 +94,7 @@ export class Matrix {
   getOrderLotSize(orderIndex, levelsPerIncrease = 4) {
     switch (Math.floor(orderIndex / levelsPerIncrease)) {
       case 2:
-        return 8000;
+        return 7000;
       case 1:
         return 7000;
       default:
