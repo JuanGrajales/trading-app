@@ -83,9 +83,12 @@ const marginLevel = ((balance - losses) * 100) / margin;
 // console.log("marginLevel", marginLevel);
 
 // (size of a single pip value / currency rate) * lot size
-const pipValue = (0.0001 / 0.73386) * 6000; // I think this is correct
+// This formula only works for currencies with USD
+// Verified for USDCAD
+// For currencies without USD I need to figure out how to calculate the correct amount
+const pipValue = (0.0001 / 1.34034) * 7000; // I think this is correct
 console.log("pipValue", pipValue);
-console.log("pipValue", pipValue * 221); // single pip value * pipSumForOrder = total profit (this can be negative, which would be it's loss)
+console.log("pipValue", pipValue * 85); // single pip value * pipSumForOrder = total profit (this can be negative, which would be it's loss)
 
 // total profit steps:
 // add lot size to orders class DONE
@@ -93,4 +96,4 @@ console.log("pipValue", pipValue * 221); // single pip value * pipSumForOrder = 
 // sum profit to get each total profit in matrix class
 
 signal.userMatrix.calculateCurrent(71342);
-console.log(signal.userMatrix.orders);
+// console.log(signal.userMatrix.orders);
